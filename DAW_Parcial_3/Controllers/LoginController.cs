@@ -31,24 +31,30 @@ namespace DAW_Parcial_3.Controllers
                                  && em.contrasena == credenciales.contrasena
                                  select em).FirstOrDefault();
 
-            string datosUsuario = JsonSerializer.Serialize(usuario);
-
-            HttpContext.Session.SetString("user", datosUsuario);
-
-            //Si usuario es nulo, se asume que es un empleado, se determinara el rol del empleado, si es Admin se llevara al Index respectivo
-            //Si es un otro rol se llevara o otro Index
+            //Si usuario es nulo, se asume que es un empleado
             if (usuario == null)
             {
+                string datosEmpleado = JsonSerializer.Serialize(empleado);
+                HttpContext.Session.SetString("empleado", datosEmpleado);
+
                 if (empleado.rol == "Admin")
                 {
                     ViewBag.Mensaje = "Bienvenido";
-                    return RedirectToAction("IndexEmpleado", "Home");
+                    return RedirectToAction("IndexAdmin", "Inicio");
                 }
-                else
-                {
-                    ViewBag.Mensaje = "Bienvenido";
-                    return RedirectToAction("IndexAdmin", "Home");
-                }
+
+                ViewBag.Mensaje = "Bienvenido";
+                return RedirectToAction("IndexEmpleado", "Inicio");
+            }
+
+            if (empleado == null)
+            {
+                string datosUsuario = JsonSerializer.Serialize(usuario);
+
+                HttpContext.Session.SetString("usuario", datosUsuario);
+
+                ViewBag.Mensaje = "Bienvenido";
+                return RedirectToAction("Index", "Inicio");
             }
 
             if (usuario == null && empleado == null)
@@ -58,7 +64,7 @@ namespace DAW_Parcial_3.Controllers
             }
 
             //Se usume que es un Usuario
-            return RedirectToAction("IndexUser", "Home");
+            return View("Index");
         }
     }
 }
