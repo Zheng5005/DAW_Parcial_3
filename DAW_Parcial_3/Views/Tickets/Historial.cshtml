@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div style="font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0;">
+    <div class="container" style="max-width: 800px; display: flex; justify-content: flex-end; align-items: flex-start; padding: 20px;">
+        <form style="display: flex; flex-wrap: nowrap;">
+            <div style="display: flex; flex-wrap: nowrap;">
+                <label style="font-weight: bold; font-size: 14px; margin-right: 10px;" for="buscar">Buscar:</label>
+                <input type="text" id="buscar" name="buscar" style="width: 150px; padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-right: 10px;">
+
+                <label style="font-weight: bold; font-size: 14px; margin-right: 10px;" for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" style="width: 150px; padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-right: 10px;">
+
+                <label style="font-weight: bold; font-size: 14px; margin-right: 10px;" for="categoria">Categoría:</label>
+                <select id="categoria" name="categoria" style="width: 150px; padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; margin-right: 10px;">
+                    <option value="todas">Todas</option>
+                    <option value="servicio">Servicio</option>
+                    <option value="incidencia">Incidencia</option>
+                </select>
+
+                <button type="submit" style="padding: 5px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">Buscar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="font-family: Arial, sans-serif; background-color: #f2f2f2; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;">
+    <div class="container" style="max-width: 800px; margin-top: 20px;">
+        @foreach(var historial in ViewBag.Historial)
+        {
+            <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 10px;">
+                <h3>Ticket #@historial.id</h3>
+                <p>Abierto: @historial.fechaI</p>
+                <p>Servicio: @historial.nombreServicio</p>
+                <p>Nombre_usuario: @historial.nombreServicio @historial.empleadoApellido</p>
+                @if (historial.empleadoName != null && historial.empleadoApellido != null)
+                {
+                    <p>Empleado_asignado: @historial.empleadoName @historial.empleadoApellido</p>
+                }
+                else
+                {
+                    <p>Empleado asignado: No asignado</p>
+                }
+                <p>Descripción: (Descripción del ticket)</p>
+                <p>Prioridad: Alta</p>
+                <button style="padding: 5px 10px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">Ver Detalles</button>
+            </div>
+        }
+    </div>
+</div>

@@ -1,74 +1,83 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@using System.Security.Claims
+﻿@using System.Security.Claims
+
 <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
     <h1 style="color: white; margin-left: 20px;">CLARO</h1>
 </nav>
 
-
 <div style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
     <div class="container" style="max-width: 600px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <h2 style="text-align: center; margin-bottom: 20px;">TICKET</h2>
-        <form style="display: grid; grid-gap: 10px;">
-            <label style="font-weight: bold;" for="creado_por">Creado por:</label>
-            <input type="text" id="creado_por" name="creado_por" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+        <!-- Buscador de Usuarios -->
+        <form method="get" action="/Tickets/Index" style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <input type="text" name="searchString" value="@ViewBag.SearchString" placeholder="Buscar usuarios por nombre" style="flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; margin-right: 10px;">
+                <button type="submit" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">Buscar</button>
+            </div>
+        </form>
+
+        <!-- Resultados de la Búsqueda -->
+        <select required id="asignado_a" name="id_empleado" multiple style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+            @foreach (var user in ViewBag.Usuarios)
+            {
+                <option value="@user.id">@user.nombre @user.apellido</option>
+            }
+        </select>
+
+        <br />
+        <br />
+
+        <!-- Formulario de Creación de Tickets -->
+        <form asp-action="Create" method="post" enctype="multipart/form-data" style="display: grid; grid-gap: 10px;">
+            @{
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claims = claimsIdentity.Claims;
+                var userId = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+                var nombre = claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
+                var apellido = claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
+            }
+
+            <label class="justify-content-center text-center" style="font-weight:900;" for="creado_por">Creado por: @nombre @apellido</label>
+            <input required type="hidden" id="userId" name="id_user" value="@userId" />
+
+            <br />
+
+            <label style="font-weight: bold;" for="serv_app">Problema:</label>
+            <input required type="text" id="serv_app" name="serv_app" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;" />
+
+            <label style="font-weight: bold;" for="descripcion">Descripción:</label>
+            <textarea required id="descripcion" name="descripcion" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;"></textarea>
 
             <label style="font-weight: bold;" for="asignado_a">Asignado a:</label>
-            <select id="asignado_a" name="asignado_a" multiple style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-                @foreach(var data in ViewBag.Empleados)
+            <select required id="asignado_a" name="id_empleado" multiple style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+                @foreach (var data in ViewBag.Empleados)
                 {
-                    <option value="@data.id">@data.nombre, @data.apellido</option>
+                    <option value="@data.id">@data.nombre @data.apellido</option>
                 }
             </select>
 
-
-
             <label style="font-weight: bold;" for="adjuntar">Adjuntar Archivo:</label>
-            <input type="file" id="adjuntar" name="adjuntar" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-
+            <input required type="file" id="archivos" name="archivo" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;" />
 
             <label style="font-weight: bold;" for="prioridad">Prioridad:</label>
-            <select id="prioridad" name="prioridad" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+            <select required id="prioridad" name="prioridad" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
                 <option value="Alta">ALTA</option>
                 <option value="Media">MEDIA</option>
                 <option value="Baja">BAJA</option>
             </select>
 
-            <label style="font-weight: bold;" for="prioridad">Tipo Problema:</label>
-            <select id="Area" name="Area" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+            <label style="font-weight: bold;" for="id_area">Tipo Problema:</label>
+            <select required id="id_area" name="id_area" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
                 @foreach (var area in ViewBag.Problemas)
                 {
                     <option value="@area.id">@area.nombre</option>
                 }
             </select>
 
-            <label style="font-weight: bold;" for="cerrado">Cerrado:</label>
-            <input type="radio" id="cerrado_si" name="cerrado" value="si" style="margin-right: 5px;">
-            <label for="cerrado_si">Si</label>
-            <input type="radio" id="cerrado_no" name="cerrado" value="no" style="margin-right: 5px;">
-            <label for="cerrado_no">No</label>
-
-            <label style="font-weight: bold;" for="fecha_cierre">Fecha de cierre:</label>
-            <input type="datetime-local" id="fecha_cierre" name="fecha_cierre" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-
             <div style="text-align: center;">
                 <input type="submit" value="Crear" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">
                 <input type="reset" value="Cancelar" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">
             </div>
         </form>
-
-        @{
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claims = claimsIdentity.Claims;
-            var userId = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
-            var nombre = claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
-            var apellido = claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
-        }
-        <p>Usuario ID: @userId</p>
-        <p>Nombre: @nombre</p>
-        <p>Apellido: @apellido</p>
     </div>
 </div>
