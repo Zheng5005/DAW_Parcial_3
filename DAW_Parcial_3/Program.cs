@@ -8,7 +8,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<DAWContext>(options =>
             options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("equiposDbConnection")
+                    builder.Configuration.GetConnectionString("DbConnection")
                 )
     );
 

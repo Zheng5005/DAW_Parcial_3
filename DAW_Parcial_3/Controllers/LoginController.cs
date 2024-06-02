@@ -32,9 +32,9 @@ namespace DAW_Parcial_3.Controllers
                                  select em).FirstOrDefault();
 
             //Si usuario es nulo, se asume que es un empleado
-            if (usuario == null)
+            if (empleado != null)
             {
-                string datosEmpleado = JsonSerializer.Serialize(empleado);
+                String datosEmpleado = JsonSerializer.Serialize(empleado);
                 HttpContext.Session.SetString("empleado", datosEmpleado);
 
                 if (empleado.rol == "Admin")
@@ -43,24 +43,16 @@ namespace DAW_Parcial_3.Controllers
                     return RedirectToAction("IndexAdmin", "Inicio");
                 }
 
-                ViewBag.Mensaje = "Bienvenido";
                 return RedirectToAction("IndexEmpleado", "Inicio");
             }
 
-            if (empleado == null)
+            if (usuario != null) 
             {
                 string datosUsuario = JsonSerializer.Serialize(usuario);
-
                 HttpContext.Session.SetString("usuario", datosUsuario);
-
                 ViewBag.Mensaje = "Bienvenido";
-                return RedirectToAction("Index", "Inicio");
-            }
 
-            if (usuario == null && empleado == null)
-            {
-                ViewBag.Mensaje = "Credenciales incorrectas!!";
-                return View("Index");
+                return RedirectToAction("Index", "Inicio");
             }
 
             //Se usume que es un Usuario

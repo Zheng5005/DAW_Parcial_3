@@ -1,0 +1,63 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
+    <h1 style="color: white; margin-left: 20px;">CLARO</h1>
+</nav>
+
+
+<div style="font-family: Arial, sans-serif; margin: 0; padding: 0;">
+    <div class="container" style="max-width: 600px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+        <h2 style="text-align: center; margin-bottom: 20px;">TICKET</h2>
+        <form style="display: grid; grid-gap: 10px;">
+            <label style="font-weight: bold;" for="id_ticket">ID_TICKET:</label>
+            <input type="text" id="id_ticket" name="id_ticket" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+            <label style="font-weight: bold;" for="abierto">El Ticket fue Abierto:</label>
+            <input type="datetime-local" id="abierto" name="abierto" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+            <label style="font-weight: bold;" for="abierto">Fecha de asignación:</label>
+            <input type="datetime-local" id="abierto" name="abierto" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+            <label style="font-weight: bold;" for="creado_por">Creado por:</label>
+            <input type="text" id="creado_por" name="creado_por" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+            <label style="font-weight: bold;" for="asignado_a">Asignado a:</label>
+            <select id="asignado_a" name="asignado_a" multiple style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+                <option value="garcia_felipe">Garcia, Felipe</option>
+                <option value="tobar_pedro">Tobar, Pedro</option>
+                <option value="valencia_adriana">Valencia, Adriana</option>
+            </select>
+
+
+
+            <label style="font-weight: bold;" for="adjuntar">Adjuntar Archivo:</label>
+            <input type="file" id="adjuntar" name="adjuntar" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+
+            <label style="font-weight: bold;" for="prioridad">Prioridad:</label>
+            <select id="prioridad" name="prioridad" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+                <option value="alta">ALTA</option>
+                <option value="media">MEDIA</option>
+                <option value="baja">BAJA</option>
+            </select>
+
+            <label style="font-weight: bold;" for="cerrado">Cerrado:</label>
+            <input type="radio" id="cerrado_si" name="cerrado" value="si" style="margin-right: 5px;">
+            <label for="cerrado_si">Si</label>
+            <input type="radio" id="cerrado_no" name="cerrado" value="no" style="margin-right: 5px;">
+            <label for="cerrado_no">No</label>
+
+            <label style="font-weight: bold;" for="fecha_cierre">Fecha de cierre:</label>
+            <input type="datetime-local" id="fecha_cierre" name="fecha_cierre" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+
+            <div style="text-align: center;">
+                <input type="submit" value="Crear" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">
+                <input type="reset" value="Cancelar" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">
+            </div>
+        </form>
+    </div>
+</div>
