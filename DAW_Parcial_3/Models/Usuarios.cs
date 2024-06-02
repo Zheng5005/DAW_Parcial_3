@@ -13,8 +13,8 @@ namespace DAW_Parcial_3.Models
         public string telefono { get; set;}
         [JsonIgnore]
         public string? contrasena { get; set;}
-        public string nombre_empresa { get; set; }
-        public string nombre_contacto { get; set; }
+        public string? nombre_empresa { get; set; }
+        public string? nombre_contacto { get; set; }
         public string? foto { get; set;}
     }
 }
