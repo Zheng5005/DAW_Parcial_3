@@ -43,7 +43,7 @@ namespace DAW_Parcial_3.Controllers
                 ViewBag.NombreUsuario = datosEmpleado.nombre;
             }
 
-            return View("IndexEmpleado");
+            return View("IndexAdmin");
         }
     }
 }
