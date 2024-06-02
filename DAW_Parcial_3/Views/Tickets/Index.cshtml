@@ -3,7 +3,7 @@
 *@
 @{
 }
-
+@using System.Security.Claims
 <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
     <h1 style="color: white; margin-left: 20px;">CLARO</h1>
 </nav>
@@ -13,23 +13,15 @@
     <div class="container" style="max-width: 600px; margin: 50px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
         <h2 style="text-align: center; margin-bottom: 20px;">TICKET</h2>
         <form style="display: grid; grid-gap: 10px;">
-            <label style="font-weight: bold;" for="id_ticket">ID_TICKET:</label>
-            <input type="text" id="id_ticket" name="id_ticket" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-
-            <label style="font-weight: bold;" for="abierto">El Ticket fue Abierto:</label>
-            <input type="datetime-local" id="abierto" name="abierto" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-
-            <label style="font-weight: bold;" for="abierto">Fecha de asignación:</label>
-            <input type="datetime-local" id="abierto" name="abierto" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-
             <label style="font-weight: bold;" for="creado_por">Creado por:</label>
             <input type="text" id="creado_por" name="creado_por" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
 
             <label style="font-weight: bold;" for="asignado_a">Asignado a:</label>
             <select id="asignado_a" name="asignado_a" multiple style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-                <option value="garcia_felipe">Garcia, Felipe</option>
-                <option value="tobar_pedro">Tobar, Pedro</option>
-                <option value="valencia_adriana">Valencia, Adriana</option>
+                @foreach(var data in ViewBag.Empleados)
+                {
+                    <option value="@data.id">@data.nombre, @data.apellido</option>
+                }
             </select>
 
 
@@ -40,9 +32,17 @@
 
             <label style="font-weight: bold;" for="prioridad">Prioridad:</label>
             <select id="prioridad" name="prioridad" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
-                <option value="alta">ALTA</option>
-                <option value="media">MEDIA</option>
-                <option value="baja">BAJA</option>
+                <option value="Alta">ALTA</option>
+                <option value="Media">MEDIA</option>
+                <option value="Baja">BAJA</option>
+            </select>
+
+            <label style="font-weight: bold;" for="prioridad">Tipo Problema:</label>
+            <select id="Area" name="Area" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;">
+                @foreach (var area in ViewBag.Problemas)
+                {
+                    <option value="@area.id">@area.nombre</option>
+                }
             </select>
 
             <label style="font-weight: bold;" for="cerrado">Cerrado:</label>
@@ -59,5 +59,16 @@
                 <input type="reset" value="Cancelar" style="padding: 10px 20px; background-color: #007bff; border: none; border-radius: 5px; color: #fff; cursor: pointer; transition: background-color 0.3s;">
             </div>
         </form>
+
+        @{
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claims = claimsIdentity.Claims;
+            var userId = claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            var nombre = claims.FirstOrDefault(c => c.Type == "Nombre")?.Value;
+            var apellido = claims.FirstOrDefault(c => c.Type == "Apellido")?.Value;
+        }
+        <p>Usuario ID: @userId</p>
+        <p>Nombre: @nombre</p>
+        <p>Apellido: @apellido</p>
     </div>
 </div>

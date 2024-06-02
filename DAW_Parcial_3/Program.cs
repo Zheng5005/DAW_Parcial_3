@@ -1,16 +1,30 @@
 using Microsoft.EntityFrameworkCore;
 using DAW_Parcial_3.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(Options =>
+    {
+        Options.LoginPath = "/Login/Index";
+    });
+
+builder.Services.AddSession(Options =>
+{
+    Options.IdleTimeout = TimeSpan.FromMinutes(60);
+    Options.Cookie.HttpOnly = true;
+    Options.Cookie.IsEssential = true;
+});
+
 builder.Services.AddDbContext<DAWContext>(options =>
-            options.UseSqlServer(
-                    builder.Configuration.GetConnectionString("DbConnection")
-                )
-    );
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DbConnection")
+        ));
 
 builder.Services.AddSession(options =>
 {
