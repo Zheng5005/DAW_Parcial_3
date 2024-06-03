@@ -58,5 +58,12 @@ namespace DAW_Parcial_3.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Login");
         }
+
+        [Authorize]
+        public IActionResult Registro1()
+        {
+            return View("Registro1");
+        }
+
     }
 }
