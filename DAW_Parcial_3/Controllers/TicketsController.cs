@@ -132,10 +132,10 @@ namespace DAW_Parcial_3.Controllers
         //Subir archivos
         public async Task<string> SubirArchivos(Stream archivoSubir, string nombreArchivo)
         {
-            string email = "jorgefranciscocz@gmail.com";
-            string clave = "ContraseñaXDXD";
-            string ruta = "desarolloweb-7ffb8.appspot.com";
-            string apikey = "AIzaSyBbIwF8pmsda6lLtldYsro7e_Aa_SCNGq0";
+            string email = "";
+            string clave = "";
+            string ruta = "";
+            string apikey = "";
 
             var auth = new FirebaseAuthProvider(new FirebaseConfig(apikey));
             var autentificar = await auth.SignInWithEmailAndPasswordAsync(email, clave);
