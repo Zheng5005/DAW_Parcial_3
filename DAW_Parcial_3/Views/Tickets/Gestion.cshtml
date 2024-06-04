@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="container" style="max-width: 800px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <table style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Ticket</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Empleado</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Reasignar</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Comentario</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Progreso</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Prioridad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">#2345</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">Alberto Mesa</td>
+                <td style="border: 1px solid #ddd; padding: 8px;"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Reasignar</button></td>
+                <td style="border: 1px solid #ddd; padding: 8px;">Detalle: Este es un comentario</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">Cancelado</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">Media</td>
+            </tr>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </tbody>
+    </table>
+</div>

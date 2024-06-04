@@ -20,8 +20,7 @@ namespace DAW_Parcial_3.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
-        public IActionResult Index(string searchString)
+        public IActionResult Index()
         {
             var DatosEmpleados = (from E in _context.empleados
                                   select new
@@ -49,15 +48,9 @@ namespace DAW_Parcial_3.Controllers
                                     apellido = U.apellido
                                 };
 
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                DatosUsuarios = DatosUsuarios.Where(s => s.nombre.Contains(searchString));
-            }
-
             ViewBag.Empleados = DatosEmpleados;
             ViewBag.Problemas = Problemas;
             ViewBag.Usuarios = DatosUsuarios.ToList();
-            ViewBag.SearchString = searchString;
 
             Correo enviarCorreos = new Correo(_configuration);
             enviarCorreos.enviar("jorgefranciscocz@gmail.com", "Hola", "Prueva");
@@ -69,13 +62,28 @@ namespace DAW_Parcial_3.Controllers
             return View();
         }
 
-        [Authorize]
+        public IActionResult SearchUsuarios(string searchString)
+        {
+            var resultados = from U in _context.usuarios
+                             where U.nombre.Contains(searchString) || U.apellido.Contains(searchString)
+                             select new
+                             {
+                                 id = U.id_user,
+                                 nombre = U.nombre,
+                                 apellido = U.apellido
+                             };
+
+            return Json(resultados.ToList());
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Create(Tickets tickets, IFormFile archivo)
+        [Authorize]
+        public async Task<IActionResult> Create(Tickets tickets, IFormFile archivo, string idUser)
         {
             if (ModelState.IsValid)
             {
                 tickets.fecha_inicio = DateTime.Now;
+                tickets.id_user = int.Parse(idUser);
 
                 if (archivo != null && archivo.Length > 0)
                 {
@@ -124,10 +132,10 @@ namespace DAW_Parcial_3.Controllers
         //Subir archivos
         public async Task<string> SubirArchivos(Stream archivoSubir, string nombreArchivo)
         {
-            string email = "";
-            string clave = "";
-            string ruta = "";
-            string apikey = "";
+            string email = "jorgefranciscocz@gmail.com";
+            string clave = "ContraseñaXDXD";
+            string ruta = "desarolloweb-7ffb8.appspot.com";
+            string apikey = "AIzaSyBbIwF8pmsda6lLtldYsro7e_Aa_SCNGq0";
 
             var auth = new FirebaseAuthProvider(new FirebaseConfig(apikey));
             var autentificar = await auth.SignInWithEmailAndPasswordAsync(email, clave);
@@ -148,30 +156,109 @@ namespace DAW_Parcial_3.Controllers
 
             return urlcarga;
         }
-        
 
-        //Para el historial
+
+        [Authorize]
         public IActionResult Historial()
         {
-            var HistorialDatos = (from U in _context.usuarios
-                                  join T in _context.tickets on U.id_user equals T.id_user
-                                  join E in _context.empleados on T.id_empleado equals E.id_empleado into empleadoGroup
-                                  from E in empleadoGroup.DefaultIfEmpty() //left join
-                                  select new
-                                  {
-                                      id = T.id_ticket,
-                                      fechaI = T.fecha_inicio,
-                                      nombreServicio = T.serv_app,
-                                      nombre = U.nombre,
-                                      apellido = U.apellido,
-                                      empleadoName = E != null ? E.nombre : null,
-                                      empleadoApellido = E != null ? E.apellido : null,
-                                      descripcion = T.descripcion,
-                                      prioridad = T.prioridad
-                                  }).ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+                int userId;
 
-            ViewBag.Historial = HistorialDatos;
-            return View(); 
+                if (userIdClaim == null || !int.TryParse(userIdClaim, out userId))
+                {
+                    return RedirectToAction("Index", "Inicio");
+                }
+
+                if (rol == "Usuario")
+                {
+                    var historial = (from t in _context.tickets
+                                     join u in _context.usuarios on t.id_user equals u.id_user
+                                     join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadoGroup
+                                     from e in empleadoGroup.DefaultIfEmpty()
+                                     where u.id_user == userId
+                                     select new
+                                     {
+                                         id = t.id_ticket,
+                                         fechaInicio = t.fecha_inicio,
+                                         servicio = t.serv_app,
+                                         nombre = u.nombre,
+                                         apellido = u.apellido,
+                                         descripcion = t.descripcion,
+                                         prioridad = t.prioridad,
+                                         empleadoName = e != null ? e.nombre : null,
+                                         empleadoApellido = e != null ? e.apellido : null
+                                     }).ToList();
+
+                    ViewBag.Rol = rol;
+                    ViewBag.Historial = historial;
+                    return View();
+                }
+                else if (rol == "Empleado")
+                {
+                    var historialEmpleado = (from t in _context.tickets
+                                             join u in _context.usuarios on t.id_user equals u.id_user
+                                             join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadoGroup
+                                             from e in empleadoGroup.DefaultIfEmpty()
+                                             where t.id_empleado == userId
+                                             select new
+                                             {
+                                                 id = t.id_ticket,
+                                                 fechaInicio = t.fecha_inicio,
+                                                 servicio = t.serv_app,
+                                                 nombre = u.nombre,
+                                                 apellido = u.apellido,
+                                                 descripcion = t.descripcion,
+                                                 prioridad = t.prioridad,
+                                                 empleadoName = e != null ? e.nombre : null,
+                                                 empleadoApellido = e != null ? e.apellido : null
+                                             }).ToList();
+
+                    ViewBag.Rol = rol;
+                    ViewBag.Historial = historialEmpleado;
+                    return View();
+                }
+                else if (rol == "Admin")
+                {
+                    var historialadmin = (from t in _context.tickets
+                                          join u in _context.usuarios on t.id_user equals u.id_user
+                                          join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadoGroup
+                                          from e in empleadoGroup.DefaultIfEmpty()
+                                          select new
+                                          {
+                                              id = t.id_ticket,
+                                              fechaInicio = t.fecha_inicio,
+                                              servicio = t.serv_app,
+                                              nombre = u.nombre,
+                                              apellido = u.apellido,
+                                              descripcion = t.descripcion,
+                                              prioridad = t.prioridad,
+                                              empleadoName = e != null ? e.nombre : null,
+                                              empleadoApellido = e != null ? e.apellido : null,
+                                              fechafin = t != null ? t.fecha_fin : null
+                                          }).ToList();
+
+                    ViewBag.Rol = rol;
+                    ViewBag.Historial = historialadmin;
+                    return View();
+                }
+            }
+
+            return RedirectToAction("Index", "Inicio");
         }
+
+        //Gestion de tickets y MSG
+        public IActionResult Gestion()
+        {
+            return View();
+        }
+
+        public IActionResult ModificarEmpleado()
+        {
+            return View();
+        }
+
     }
 }

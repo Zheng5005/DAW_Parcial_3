@@ -32,9 +32,8 @@ namespace DAW_Parcial_3.Controllers
         {
             if (ModelState.IsValid)
             {
-                string child = "Carpeta";
+                string child = "FotosEmpleados";
                 empleados.rol = Request.Form["rol"];
-
 
                 if (archivo != null && archivo.Length > 0)
                 {
@@ -55,7 +54,7 @@ namespace DAW_Parcial_3.Controllers
             return View();
         }
 
-        // POST: Empleados/Create
+        // POST: Usuarios/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 
@@ -65,8 +64,7 @@ namespace DAW_Parcial_3.Controllers
         {
             if (ModelState.IsValid)
             {
-                string child = "Carpeta";
-
+                string child = "FotosUsuarios";
 
                 if (archivo != null && archivo.Length > 0)
                 {
