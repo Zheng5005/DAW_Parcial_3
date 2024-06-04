@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using Firebase.Auth;
 using Firebase.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAW_Parcial_3.Controllers
 {
@@ -47,6 +48,26 @@ namespace DAW_Parcial_3.Controllers
                                     nombre = U.nombre,
                                     apellido = U.apellido
                                 };
+
+            var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            if (rol == "Usuario")
+            {
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+                int userid = Convert.ToInt32(userIdClaim);
+
+                var usuarioDatos = (from U in _context.usuarios
+                                    where U.id_user == userid
+                                    select new
+                                    {
+                                        id = U.id_user,
+                                        nombre = U.nombre,
+                                        apellido = U.apellido
+                                    }).FirstOrDefault();  // Cambiado a FirstOrDefault
+
+                ViewBag.usuarioid = userIdClaim;
+                ViewBag.rolusuarios = rol;
+                ViewBag.usuariosget = usuarioDatos;  // Pasar un solo objeto en lugar de una lista
+            }
 
             ViewBag.Empleados = DatosEmpleados;
             ViewBag.Problemas = Problemas;
@@ -95,7 +116,20 @@ namespace DAW_Parcial_3.Controllers
                 _context.Add(tickets);
                 await _context.SaveChangesAsync();
                 // Redirigir a la acción IndexAdmin en el controlador Inicio
-                return RedirectToAction("IndexAdmin", "Inicio");
+                var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                if (rol == "Usuario")
+                {
+                    return RedirectToAction("Index", "Inicio");
+                }
+                else if (rol == "Empleado")
+                {
+                    return RedirectToAction("IndexEmpleado", "Inicio");
+                }
+                else if (rol == "Admin")
+                {
+                    return RedirectToAction("IndexAdmin", "Inico");
+                }
+                else { return BadRequest(); }
             }
 
             // Recarregar dados necessários para a vista Index
@@ -250,15 +284,78 @@ namespace DAW_Parcial_3.Controllers
         }
 
         //Gestion de tickets y MSG
+        [Authorize]
+        [HttpGet]
         public IActionResult Gestion()
         {
+            var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+
+            if (rol == "Admin")
+            {
+                var ticketAdmin = (from t in _context.tickets
+                                   join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadogroup
+                                   from e in empleadogroup.DefaultIfEmpty()
+                                   join c in _context.comentarios on t.id_comentario equals c.id_comentario into comentariogroup
+                                   from c in comentariogroup.DefaultIfEmpty()
+                                   select new
+                                   {
+                                       id = t.id_ticket,
+                                       empleadoN = e != null ? e.nombre : null,
+                                       empleadoA = e != null ? e.apellido : null,
+                                       comentario = c != null ? c.comentario : null,
+                                       progreso = t != null ? t.progreso : null,
+                                       prioridad = t != null ? t.prioridad : null
+                                   }).ToList();
+
+                var empleados = (from e in _context.empleados
+                                 where e.rol == "Empleado"
+                                 select e).ToList();
+
+                ViewBag.Rol = rol;
+                ViewBag.Empleados = empleados;
+                ViewBag.Administracion = ticketAdmin;
+            }
+
             return View();
         }
 
-        public IActionResult ModificarEmpleado()
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> ModEmpleado (Tickets tickets, int idticket, int idempleado)
         {
-            return View();
+            var ticket = await _context.tickets.FirstOrDefaultAsync(t => t.id_ticket == idticket);
+            if (ticket == null)
+            {
+                return BadRequest();
+            }
+
+            ticket.id_empleado = idempleado;
+
+            _context.Update(ticket);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Gestion", "Tickets");
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> changePriority(string prioridad, int idticket)
+        {
+
+            var ticket = await _context.tickets.FirstOrDefaultAsync(t => t.id_ticket == idticket);
+
+            if (ticket == null)
+            {
+                return NotFound();
+            }
+
+            ticket.prioridad = prioridad;
+
+            _context.Update(ticket);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Gestion", "Tickets");
+        }
     }
 }

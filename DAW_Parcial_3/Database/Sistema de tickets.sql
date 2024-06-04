@@ -27,7 +27,7 @@ CREATE TABLE Empleados (
 );
 
 CREATE TABLE Areas (
-    id_area INT NOT NULL PRIMARY KEY,
+    id_area INT NOT NULL PRIMARY KEY IDENTITY(1,1),
     nombre VARCHAR(50) NOT NULL
 );
 

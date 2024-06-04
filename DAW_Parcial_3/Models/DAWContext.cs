@@ -10,5 +10,6 @@ namespace DAW_Parcial_3.Models
         public DbSet<Empleados> empleados { get; set; }
         public DbSet<Areas> areas { get; set; }
         public DbSet<Tickets> tickets { get; set; }
+        public DbSet<Comentarios> comentarios { get; set; }
     }
 }
