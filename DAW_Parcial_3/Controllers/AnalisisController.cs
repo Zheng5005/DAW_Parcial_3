@@ -33,5 +33,20 @@ namespace DAW_Parcial_3.Controllers
 
             return StatusCode(StatusCodes.Status200OK, Lista);
         }
+
+        public IActionResult resumenTickets()
+        {
+            List<VMTickets> Lista = (from t in _context.tickets
+                                       group t by t.prioridad into grupo
+                                       orderby grupo.Count() 
+                                       select new VMTickets
+                                       {
+                                           prioridad = grupo.Key,
+                                           valor = grupo.Count(),
+
+                                       }).ToList();
+
+            return StatusCode(StatusCodes.Status200OK, Lista);
+        }
     }
 }

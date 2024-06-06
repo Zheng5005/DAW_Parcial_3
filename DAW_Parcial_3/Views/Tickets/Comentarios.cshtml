@@ -1,0 +1,82 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Primeros Tres Datos</h1>
+    <button onclick="fetchData()">Mostrar Datos</button>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Las filas de datos se insertarán aquí -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('http://localhost:3000/data');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const tableBody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+
+                // Limpiar cualquier fila existente en el cuerpo de la tabla
+                tableBody.innerHTML = '';
+
+                data.forEach(row => {
+                    const newRow = tableBody.insertRow();
+                    Object.values(row).forEach(cell => {
+                        const newCell = newRow.insertCell();
+                        newCell.textContent = cell;
+                    });
+                });
+            } catch (error) {
+                console.error('Error al obtener los datos:', error);
+            }
+        }
+    </script>
+</body>
+</html>
