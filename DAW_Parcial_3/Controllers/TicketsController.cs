@@ -41,40 +41,20 @@ namespace DAW_Parcial_3.Controllers
                                  nombre = A.nombre
                              }).ToList();
 
-            var DatosUsuarios = from U in _context.usuarios
+            var DatosUsuarios = (from U in _context.usuarios
                                 select new
                                 {
                                     id = U.id_user,
                                     nombre = U.nombre,
                                     apellido = U.apellido
-                                };
-
-            var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            if (rol == "Usuario")
-            {
-                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
-                int userid = Convert.ToInt32(userIdClaim);
-
-                var usuarioDatos = (from U in _context.usuarios
-                                    where U.id_user == userid
-                                    select new
-                                    {
-                                        id = U.id_user,
-                                        nombre = U.nombre,
-                                        apellido = U.apellido
-                                    }).FirstOrDefault();  // Cambiado a FirstOrDefault
-
-                ViewBag.usuarioid = userIdClaim;
-                ViewBag.rolusuarios = rol;
-                ViewBag.usuariosget = usuarioDatos;  // Pasar un solo objeto en lugar de una lista
-            }
+                                }).ToList();
 
             ViewBag.Empleados = DatosEmpleados;
             ViewBag.Problemas = Problemas;
-            ViewBag.Usuarios = DatosUsuarios.ToList();
+            ViewBag.Usuario = DatosUsuarios;
 
-            Correo enviarCorreos = new Correo(_configuration);
-            enviarCorreos.enviar("jorgefranciscocz@gmail.com", "Hola", "Prueva");
+            //Correo enviarCorreos = new Correo(_configuration);
+            //enviarCorreos.enviar("jorgefranciscocz@gmail.com", "Hola", "Prueva");
 
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
@@ -82,6 +62,37 @@ namespace DAW_Parcial_3.Controllers
 
             return View();
         }
+
+        public IActionResult Index1()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            int userid = Convert.ToInt32(userId);
+
+            var Problemas = (from A in _context.areas
+                             select new
+                             {
+                                 id = A.Id_area,
+                                 nombre = A.nombre
+                             }).ToList();
+
+            var DatosUsuarios = (from U in _context.usuarios
+                                where U.id_user == userid
+                                select new 
+                                {
+                                    id = U.id_user,
+                                    nombre = U.nombre,
+                                    apellido = U.apellido
+                                }).FirstOrDefault();
+
+
+            ViewBag.Problemas = Problemas;
+            ViewBag.usuario = DatosUsuarios;
+            ViewBag.userId = userid;
+
+            return View();
+        }
+
 
         public IActionResult SearchUsuarios(string searchString)
         {
@@ -103,8 +114,10 @@ namespace DAW_Parcial_3.Controllers
         {
             if (ModelState.IsValid)
             {
+                string estado = "No Asignado";
                 tickets.fecha_inicio = DateTime.Now;
                 tickets.id_user = int.Parse(idUser);
+                tickets.progreso = estado;
 
                 if (archivo != null && archivo.Length > 0)
                 {
@@ -115,8 +128,10 @@ namespace DAW_Parcial_3.Controllers
 
                 _context.Add(tickets);
                 await _context.SaveChangesAsync();
-                // Redirigir a la acción IndexAdmin en el controlador Inicio
-                var rol = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var rol = claimsIdentity.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
                 if (rol == "Usuario")
                 {
                     return RedirectToAction("Index", "Inicio");
@@ -127,38 +142,13 @@ namespace DAW_Parcial_3.Controllers
                 }
                 else if (rol == "Admin")
                 {
-                    return RedirectToAction("IndexAdmin", "Inico");
+                    return RedirectToAction("IndexAdmin", "Inicio");
                 }
-                else { return BadRequest(); }
+                else
+                {
+                    return BadRequest();
+                }
             }
-
-            // Recarregar dados necessários para a vista Index
-            var DatosEmpleados = (from E in _context.empleados
-                                  select new
-                                  {
-                                      id = E.id_empleado,
-                                      nombre = E.nombre,
-                                      apellido = E.apellido,
-                                      correo = E.correo,
-                                      telefono = E.telefono,
-                                      rol = E.rol
-                                  }).ToList();
-
-            var Problemas = (from A in _context.areas
-                             select new
-                             {
-                                 id = A.Id_area,
-                                 nombre = A.nombre
-                             }).ToList();
-
-            
-            ViewBag.Empleados = DatosEmpleados;
-            ViewBag.Problemas = Problemas;
-
-            // Almacenar el id del usuario en ViewBag para el formulario
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
-            ViewBag.UserId = userId;
 
             return View("Index", tickets);
         }
@@ -166,10 +156,10 @@ namespace DAW_Parcial_3.Controllers
         //Subir archivos
         public async Task<string> SubirArchivos(Stream archivoSubir, string nombreArchivo)
         {
-            string email = "";
-            string clave = "";
-            string ruta = "";
-            string apikey = "";
+            string email = "jorgefranciscocz@gmail.com";
+            string clave = "ContraseñaXDXD";
+            string ruta = "desarolloweb-7ffb8.appspot.com";
+            string apikey = "AIzaSyBbIwF8pmsda6lLtldYsro7e_Aa_SCNGq0";
 
             var auth = new FirebaseAuthProvider(new FirebaseConfig(apikey));
             var autentificar = await auth.SignInWithEmailAndPasswordAsync(email, clave);
@@ -283,7 +273,7 @@ namespace DAW_Parcial_3.Controllers
             return RedirectToAction("Index", "Inicio");
         }
 
-        //Gestion de tickets y MSG
+        //Gestion de tickets
         [Authorize]
         [HttpGet]
         public IActionResult Gestion()
@@ -296,7 +286,7 @@ namespace DAW_Parcial_3.Controllers
                 var ticketAdmin = (from t in _context.tickets
                                    join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadogroup
                                    from e in empleadogroup.DefaultIfEmpty()
-                                   join c in _context.comentarios on t.id_comentario equals c.id_comentario into comentariogroup
+                                   join c in _context.comentarios on t.id_ticket equals c.id_ticket into comentariogroup
                                    from c in comentariogroup.DefaultIfEmpty()
                                    select new
                                    {

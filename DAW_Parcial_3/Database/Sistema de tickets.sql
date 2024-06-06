@@ -31,13 +31,6 @@ CREATE TABLE Areas (
     nombre VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Comentarios (
-    id_comentario INT NOT NULL PRIMARY KEY IDENTITY(1,1),
-    id_ticket INT NOT NULL,
-    comentario VARCHAR(MAX) NOT NULL,
-    estado VARCHAR(50),
-    
-);
 
 CREATE TABLE Tickets (
     id_ticket INT NOT NULL PRIMARY KEY IDENTITY(1,1),
@@ -52,9 +45,15 @@ CREATE TABLE Tickets (
     fecha_inicio DATETIME NOT NULL,
     fecha_asig DATETIME,
     fecha_fin DATETIME,
-    id_comentario INT,
     FOREIGN KEY (id_user) REFERENCES Usuarios(id_user),
     FOREIGN KEY (id_empleado) REFERENCES Empleados(id_empleado),
-    FOREIGN KEY (id_area) REFERENCES Areas(id_area),
-    FOREIGN KEY (id_comentario) REFERENCES Comentarios(id_comentario)
+    FOREIGN KEY (id_area) REFERENCES Areas(id_area)
+);
+
+CREATE TABLE Comentarios (
+    id_comentario INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+    id_ticket INT NOT NULL,
+    comentario VARCHAR(MAX) NOT NULL,
+    estado VARCHAR(50),
+    FOREIGN KEY (id_ticket) REFERENCES Tickets(id_ticket)
 );

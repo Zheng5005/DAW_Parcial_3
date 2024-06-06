@@ -1,22 +1,23 @@
 ﻿@{
     var Datos = ViewBag.DatosT;
+    var DatosPanelInfo = ViewBag.DatosPanelInfo;
 }
 
 <div style="background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; margin-bottom: 20px;">
     <h2>TICKET ENTRANTES</h2>
     <div style="display: flex; justify-content: space-around; margin-top: 10px;">
         <div style="flex: 1;">
-            <div style="background-color: #f9f9f9; margin-right: 20px; border-radius: 8px; padding: 20px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
+            <div style="background-color: #f9f9f9; margin-right: 50px; border-radius: 8px; padding: 20px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);">
                 <h3>PANEL DE INFORMACIÓN</h3>
-                <p>SIN RESOLVER: <strong>5</strong></p>
-                <p>EN ESPERA: <strong>0</strong></p>
-                <p>ABIERTO: <strong>3</strong></p>
-                <p>NO ASIGNADO: <strong>3</strong></p>
+                @foreach (var item in DatosPanelInfo)
+                {
+                    <p>@item.Progreso: <strong>@item.Conteo</strong></p>
+                }
             </div>
         </div>
         <div style="flex: 1;">
             <h3>Tickets Entrantes</h3>
-            <table style="border-collapse: collapse; width: 100%;">
+            <table style="border-collapse: collapse; width: 800px;">
                 <thead>
                     <tr>
                         <th style="border: 1px solid #000; padding: 8px;">Ticket</th>
@@ -33,7 +34,113 @@
                             <td style="border: 1px solid #000; padding: 8px;">@datos.idT</td>
                             <td style="border: 1px solid #000; padding: 8px;">@datos.nombre @datos.apellido</td>
                             <td style="border: 1px solid #000; padding: 8px;">@datos.prioridad</td>
-                            <td style="border: 1px solid #000; padding: 8px;"><a href="#">VER</a></td>
+                            @if (datos.estado == "No Asignado")
+                            {
+                                <td style="border: 1px solid #000; padding: 8px;">
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal_@datos.idT">Iniciar</button>
+                                </td>
+
+                                <!-- Modal para los datos de usuario al iniciar el ticket -->
+
+                                <div class="modal fade" id="exampleModal_@datos.idT" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Ticket #@datos.idT</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form asp-action="ModDatos" asp-controller="Manejo">
+                                                <div class="modal-body">
+                                                    <input hidden value="@datos.correo" type="text" name="correo" id="correo"/>
+                                                    <input hidden value="@datos.idT" type="text" id="id" name="id" />
+                                                    <input hidden value="Iniciado" type="text" id="estado" name="estado" />
+
+                                                    <label style="font-weight: bold;" for="adjuntar">Comentario: </label>
+                                                    <textarea id="comentario" name="comentario" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            }
+                            else if (datos.estado == "Iniciado")
+                            {
+                                <td style="border: 1px solid #000; padding: 8px;">
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModalIniciar_@datos.idT">Procesar</button>
+                                </td>
+
+                                <!-- Modal para los datos de usuario al iniciar el ticket -->
+
+                                <div class="modal fade" id="exampleModalIniciar_@datos.idT" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Ticket #@datos.idT</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form asp-action="ModDatos" asp-controller="Manejo">
+                                                <div class="modal-body">
+                                                    <input hidden value="@datos.correo" type="text" name="correo" id="correo" />
+                                                    <input hidden value="@datos.idT" type="text" id="id" name="id" />
+                                                    <input hidden value="Procesando" type="text" id="estado" name="estado" />
+
+                                                    <label style="font-weight: bold;" for="adjuntar">Comentario: </label>
+                                                    <textarea id="comentario" name="comentario" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (datos.estado == "Procesando")
+                            {
+                                <td style="border: 1px solid #000; padding: 8px;">
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModalFinalizar_@datos.idT">Finalizarlo</button>
+                                </td>
+
+                                <!-- Modal para los datos de usuario al iniciar el ticket -->
+
+                                <div class="modal fade" id="exampleModalFinalizar_@datos.idT" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Ticket #@datos.idT</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form asp-action="ModDatosFin" asp-controller="Manejo">
+                                                <div class="modal-body">
+                                                    <input hidden value="@datos.correo" type="text" name="correo" id="correo" />
+                                                    <input hidden value="@datos.idT" type="text" id="id" name="id" />
+                                                    <input hidden value="Finalizado" type="text" id="estado" name="estado" />
+
+
+                                                    <label style="font-weight: bold;" for="adjuntar">Comentario: </label>
+                                                    <textarea id="comentario" name="comentario" style="width: calc(100% - 10px); padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;"></textarea>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else if (datos.estado == "Finalizado")
+                            {
+                                <td style="border: 1px solid #000; padding: 8px;">
+                                    <button type="button" class="btn btn-secondary" disabled>Finalizado</button>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>

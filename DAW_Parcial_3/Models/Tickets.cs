@@ -17,7 +17,5 @@ namespace DAW_Parcial_3.Models
         public DateTime fecha_inicio { get; set; }
         public DateTime? fecha_asig {  get; set; }
         public DateTime? fecha_fin {  get; set; }
-        public int? id_comentario { get; set; }
-
     }
 }
