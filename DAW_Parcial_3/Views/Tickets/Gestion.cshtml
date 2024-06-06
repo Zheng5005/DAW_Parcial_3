@@ -14,7 +14,7 @@
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Ticket</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Empleado</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; width: 110px;">Reasignar</th>
-                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; width: 400px;">Comentario</th>
+                <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; width: 400px;">Descripcion</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2;">Progreso</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; width: 110px;">Prioridad</th>
                 <th style="border: 1px solid #ddd; padding: 8px; background-color: #f2f2f2; width: 110px;">Cambiar</th>
@@ -30,13 +30,13 @@
                     {
                         <td style="border: 1px solid #ddd; padding: 8px;">@items.empleadoN @items.empleadoA</td>
                         <td style="border: 1px solid #ddd; padding: 8px;"><button type="button" style="width: 100px" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_@items.id">Reasignar</button></td>
-                        if (items.comentario != null)
+                        if (items.descripcion != null)
                         {
-                            <td style="border: 1px solid #ddd; padding: 8px;">@items.comentario</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">@items.descripcion</td>
                         }
                         else
                         {
-                            <td style="border: 1px solid #ddd; padding: 8px;">Sin comentario</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Sin descripcion</td>
                         }
 
                         if (items.progreso != null)

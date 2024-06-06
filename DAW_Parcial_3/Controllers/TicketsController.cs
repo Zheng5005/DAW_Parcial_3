@@ -286,14 +286,12 @@ namespace DAW_Parcial_3.Controllers
                 var ticketAdmin = (from t in _context.tickets
                                    join e in _context.empleados on t.id_empleado equals e.id_empleado into empleadogroup
                                    from e in empleadogroup.DefaultIfEmpty()
-                                   join c in _context.comentarios on t.id_ticket equals c.id_ticket into comentariogroup
-                                   from c in comentariogroup.DefaultIfEmpty()
                                    select new
                                    {
                                        id = t.id_ticket,
                                        empleadoN = e != null ? e.nombre : null,
                                        empleadoA = e != null ? e.apellido : null,
-                                       comentario = c != null ? c.comentario : null,
+                                       descripcion = t.descripcion,
                                        progreso = t != null ? t.progreso : null,
                                        prioridad = t != null ? t.prioridad : null
                                    }).ToList();
