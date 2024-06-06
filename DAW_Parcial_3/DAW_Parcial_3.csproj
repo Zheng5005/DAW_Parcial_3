@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Tickets\Manejo.cshtml" />
+    <Content Remove="wwwroot\js\app.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,10 +28,12 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Tickets\Manejo.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\js\app.js" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\Manejo\Index.cshtml" />
+    <None Include="wwwroot\js\app.js" />
   </ItemGroup>
 
 </Project>
