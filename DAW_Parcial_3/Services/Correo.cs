@@ -43,6 +43,7 @@ namespace DAW_Parcial_3.Services
                 // Manejar la excepción adecuadamente (log, etc.)
                 Console.WriteLine(ex.ToString());
             }
+
         }
     }
 }
