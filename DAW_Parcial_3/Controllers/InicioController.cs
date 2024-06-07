@@ -16,7 +16,8 @@ namespace DAW_Parcial_3.Controllers
             _context = context;
         }
 
-        [Authorize]
+        [Authorize]  
+
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("usuario") != null)
