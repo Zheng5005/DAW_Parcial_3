@@ -23,7 +23,7 @@
 </head>
 <body>
     <nav class="navbar bg-dark border-bottom border-body" data-bs-theme="dark">
-        <h1 style="color: white; margin-left: 20px;">CLARO</h1>
+        <h1 style="color: white; margin-left: 20px;">CLASER</h1>
     </nav>
 
     <div class="container my-5 pt-5">
@@ -41,64 +41,82 @@
                             <!-- Columna 1 -->
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <div class="d-flex">
-                                        <div class="form-group px-1">
-                                            <label style="font-size:20px">Nombre</label>
-                                            <input asp-for="nombre" class="form-control" />
-                                            <span asp-validation-for="nombre" class="text-danger"></span>
+                                        <div class="d-flex">
+                                            <div class="form-group px-1">
+                                                <label style="font-size:20px">Nombre</label>
+                                                <input asp-for="nombre" class="form-control" />
+                                                <span asp-validation-for="nombre" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group px-1">
+                                                <label style="font-size:20px">Apellido</label>
+                                                <input asp-for="apellido" class="form-control" />
+                                                <span asp-validation-for="apellido" class="text-danger"></span>
+                                            </div>
                                         </div>
-                                        <div class="form-group px-1">
-                                            <label style="font-size:20px">Apellido</label>
-                                            <input asp-for="apellido" class="form-control" />
-                                            <span asp-validation-for="apellido" class="text-danger"></span>
+                                        <br>
+                                        <div class="form-group">
+                                            <label style="font-size: 20px;">Correo</label>
+                                            <input asp-for="correo" class="form-control" />
+                                            <span asp-validation-for="correo" class="text-danger"></span>
                                         </div>
-                                    </div>
-                                    <br>
-                                <div class="form-group">
-                                    <label style="font-size: 20px;">Correo</label>
-                                    <input asp-for="correo" class="form-control" />
-                                    <span asp-validation-for="correo" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 20px;">Teléfono</label>
-                                    <input asp-for="telefono" class="form-control" />
-                                    <span asp-validation-for="telefono" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 20px;">Contraseña</label>
-                                    <input type="password" asp-for="contrasena" class="form-control" />
-                                    <span asp-validation-for="contrasena" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 20px;">Nombre de la Empresa</label>
-                                    <input asp-for="nombre_empresa" class="form-control" />
-                                    <span asp-validation-for="nombre_empresa" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label style="font-size: 20px;">Nombre de Contacto</label>
-                                    <input asp-for="nombre_contacto" class="form-control" />
-                                    <span asp-validation-for="nombre_contacto" class="text-danger"></span>
+                                        <div class="form-group">
+                                            <label style="font-size: 20px;">Teléfono</label>
+                                            <input asp-for="telefono" class="form-control" />
+                                            <span asp-validation-for="telefono" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="font-size: 20px;">Contraseña</label>
+                                            <input type="password" asp-for="contrasena" class="form-control" />
+                                            <span asp-validation-for="contrasena" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="font-size: 20px;">Nombre de la Empresa</label>
+                                            <input asp-for="nombre_empresa" class="form-control" />
+                                            <span asp-validation-for="nombre_empresa" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label style="font-size: 20px;">Nombre de Contacto</label>
+                                            <input asp-for="nombre_contacto" class="form-control" />
+                                            <span asp-validation-for="nombre_contacto" class="text-danger"></span>
+                                        </div>
+                                   
                                 </div>
                             </div>
 
-                            <!-- Columna 2 -->
-                            <div class="col-md-6">
-                                <div class="form-group text-center">
-                                    <div class="image-preview" id="imagePreview">
-                                        <img src="" class="image-preview__image" id="previewImage" alt="" style="max-width: 100%; max-height: 200px;">
-                                        <span class="image-preview__default-text">Vista previa</span>
+                                <!-- columna 2 -->
+                                <div class="col-md-6">
+                                    <div class="form-group container">
+                                        <div class="text-center">
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+
+                                            <!-- Centro el contenido -->
+                                            <div class="image-preview" id="imagePreview">
+                                                <img src="" class="image-preview__image" id="previewImage">
+                                                <span class="image-preview__default-text">Vista previa</span>
+                                            </div>
+                                            @* Coso para la foto *@
+                                            <label for="photo">Incluya una foto</label>
+                                            <div class="row justify-content-center">
+                                                <!-- Centro el row -->
+                                                <input type="file" id="archivo" name="archivo" accept="image/*" />
+                                            </div>
+
+                                            <!-- Botones de envío -->
+                                            <div class="container my-4 pt-4">
+                                                <div class="d-flex justify-content-center text-center">
+                                                    <button class="btn btn-dark btn-lg mx-2" style="background-color: #17202A;">Registrarse</button>
+                                                </div>
+                                            </div>
+
+                                        </div>
                                     </div>
-                                    <label for="photo" style="font-size: 20px;">Incluya una foto</label>
-                                    <input type="file" id="archivo" name="archivo" accept="image/*" />
                                 </div>
-                            </div>
-                        </div>
-                        <!-- Botones de envío -->
-                        <div class="container my-4 pt-4">
-                            <div class="d-flex justify-content-center text-center">
-                                <button class="btn btn-primary btn-lg mx-2" type="submit">Registrarse</button>
-                            </div>
-                        </div>
+                             </div>
+
+                           
                     </form>
                 </div>
             </div>
@@ -108,12 +126,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <p>Somos Claro de tu confianza</p>
+                    <p>Somos CLASER de tu confianza</p>
                     <p>Dirección: Bypass a Metapán y, Calle Antigua A San Salvador, Santa Ana</p>
                 </div>
                 <div class="col-md-4">
                     <p>Teléfono: +503 1111-2222</p>
-                    <p>Correo electrónico: claro@empresa.com</p>
+                    <p>Correo electrónico: claser@empresa.com</p>
                 </div>
                 <div class="col-md-4">
                     <p>Sitio web: <a href="http://www.empresa.com" style="text-decoration: none; color: #fff;">www.empresa.com</a></p>
