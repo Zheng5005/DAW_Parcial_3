@@ -18,8 +18,8 @@
         <!-- Formulario de Creación de Tickets -->
         <form asp-action="Create" method="post" enctype="multipart/form-data" style="display: grid; grid-gap: 10px;">
 
-            <label style="font-weight: bold;" for="serv_app">Usuario: @usuario.id @usuario.nombre @usuario.apellido</label>
-            <input value="@usuario.id" name="idUser" id="idUser" readonly />
+            <label style="font-weight: bold;" for="serv_app">Usuario:@usuario.nombre @usuario.apellido</label>
+            <input value="@usuario.id" name="idUser" id="idUser" readonly hidden/>
             
             <label style="font-weight: bold;" for="serv_app">Problema:</label>
             <input required type="text" id="serv_app" name="serv_app" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px;" />
