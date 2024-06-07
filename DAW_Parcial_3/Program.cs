@@ -3,6 +3,17 @@ using DAW_Parcial_3.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 
+//TESTEOO 
+
+using System;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+using System.Threading;
+
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -56,4 +67,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
 
+
+app.MapControllerRoute(
+    name: "test",
+    pattern: "test/run",
+    defaults: new { controller = "Test", action = "RunSeleniumTest" });
+
 app.Run();
+
