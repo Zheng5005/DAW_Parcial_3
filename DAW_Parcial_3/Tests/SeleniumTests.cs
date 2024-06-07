@@ -12,28 +12,37 @@ namespace DAW_Parcial_3.Tests
         {
             List<string> searchResultsList = new List<string>();
 
-            // Configurar el WebDriver (asegúrate de que chromedriver esté en tu PATH)
+           
             IWebDriver driver = new ChromeDriver(@"C:\Users\Sony\Downloads\chromedriver-win64\chromedriver-win64\chromedriver.exe");
 
-            // Navegar a Google
+           
             driver.Navigate().GoToUrl("https://localhost:7109/");
 
-            // Encontrar los campos de entrada de correo electrónico y contraseña
-            IWebElement emailInput = driver.FindElement(By.Name("correo"));
-            IWebElement passwordInput = driver.FindElement(By.Name("contrasena"));
+            IWebElement email = driver.FindElement(By.Name("correo"));
+            IWebElement password = driver.FindElement(By.Name("contrasena"));
+            //testeo para user
+            //email.SendKeys("HarryMC@gmail.com");
+            //password.SendKeys("852456");
 
-            // Ingresar las credenciales
-            emailInput.SendKeys("esmeralda.garcia1@catolica.edu.sv");
-            passwordInput.SendKeys("esmeralda");
+            //testeo para Empleado
 
-            // Encontrar y hacer clic en el botón de inicio de sesión
+            //email.SendKeys("esmeralda.garcia1@catolica.edu.sv");
+            //password.SendKeys("esmeralda");
+
+
+            //testeo para admin
+            email.SendKeys("jorgefranciscocz@gmail.com");
+            password.SendKeys("852456");
+
+
             IWebElement loginButton = driver.FindElement(By.CssSelector("button.btn-submit"));
             loginButton.Click();
 
-            // Esperar unos segundos para ver los resultados
+           
             Thread.Sleep(5000);
 
-            // Obtener los resultados de búsqueda
+
+
             IList<IWebElement> searchResults = driver.FindElements(By.CssSelector("div.g"));
             foreach (var result in searchResults)
             {

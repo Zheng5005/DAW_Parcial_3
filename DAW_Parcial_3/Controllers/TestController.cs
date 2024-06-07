@@ -10,14 +10,6 @@ namespace DAW_Parcial_3.Controllers
             return View();
         }
 
-        //public IActionResult RunSeleniumTest()
-        //{
-        //    var seleniumTest = new SeleniumTests();
-        //    seleniumTest.RunTest();
-
-        //    return Content("Selenium Test Completed");
-        //}
-
 
         public IActionResult RunSeleniumTest()
         {
