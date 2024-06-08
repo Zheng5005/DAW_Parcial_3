@@ -19,7 +19,7 @@ namespace DAW_Parcial_3.Services
             {
                 string connectionString = _configuration.GetConnectionString("DbConnection");
                 string sqlQuery = "EXEC msdb.dbo.sp_send_dbmail " +
-                                  "@profile_name = 'SQL_Catolica', " +
+                                  "@profile_name = 'SQL-CATOLICA', " +
                                   "@recipients = @Destinatario, " +
                                   "@body = @CuerpoMSG, " +
                                   "@subject = @AsuntoMSG";
